@@ -11,7 +11,7 @@ An end-to-end machine learning project that predicts UEFA Champions League match
 
 ## Demo
 
-> Deploy link goes here after Streamlit Cloud setup
+> https://ucl-predictor-ou2a7kxiszfw2zyqndtnw6.streamlit.app/
 
 ---
 
