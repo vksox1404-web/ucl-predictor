@@ -121,7 +121,7 @@ All three models use `RandomForestClassifier` with `class_weight='balanced'` to 
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/your-username/ucl-predictor.git
+git clone https://github.com/vksox1404-web/ucl-predictor.git
 cd ucl-predictor
 ```
 
