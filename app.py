@@ -498,6 +498,7 @@ if page == "Dashboard":
     st.markdown("<div class='section-title'>Upcoming Matches</div>", unsafe_allow_html=True)
 
     upcoming = get_upcoming_matches()
+    st.caption(f"DEBUG — API returned {len(upcoming)} upcoming matches")
     if upcoming:
         for i in range(0, len(upcoming), 2):
             cols = st.columns(2)
