@@ -12,6 +12,15 @@ from streamlit_option_menu import option_menu
 
 load_dotenv()
 
+def get_api_key():
+    """Read API key from .env locally or Streamlit secrets on cloud."""
+    key = get_api_key()
+    if not key:
+        try:
+            key = st.secrets["FOOTBALL_API_KEY"]
+        except: pass
+    return key
+
 # ─────────────────────────────────────────
 # PAGE CONFIG
 # ─────────────────────────────────────────
@@ -203,7 +212,7 @@ def load_data():
 @st.cache_data(ttl=3600)
 def get_upcoming_matches():
     from datetime import datetime, timezone
-    api_key = os.getenv("FOOTBALL_API_KEY")
+    api_key = get_api_key()
     try:
         r = requests.get(
             "https://api.football-data.org/v4/competitions/CL/matches",
@@ -239,7 +248,7 @@ def get_upcoming_matches():
 @st.cache_data(ttl=86400)
 def get_current_ucl_teams():
     """Fetch the actual current season UCL teams from the API."""
-    api_key = os.getenv("FOOTBALL_API_KEY")
+    api_key = get_api_key()
     try:
         r = requests.get(
             "https://api.football-data.org/v4/competitions/CL/teams",
@@ -497,8 +506,8 @@ if page == "Dashboard":
 
     st.markdown("<div class='section-title'>Upcoming Matches</div>", unsafe_allow_html=True)
 
+
     upcoming = get_upcoming_matches()
-    st.caption(f"DEBUG — API returned {len(upcoming)} upcoming matches")
     if upcoming:
         for i in range(0, len(upcoming), 2):
             cols = st.columns(2)
@@ -546,7 +555,7 @@ if page == "Dashboard":
                             st.session_state['away_select'] = find_ucl_team(m['away'])
                             st.rerun()
     else:
-        st.markdown("<div style='color:#64748b;font-size:0.85rem;margin-bottom:1rem'>No scheduled matches at the moment — showing the most recent UCL results.</div>", unsafe_allow_html=True)
+        st.markdown("<div style='color:#64748b;font-size:0.85rem;margin-bottom:1rem'>No upcoming fixtures available right now — fixtures are typically published a few days before match day. Showing the most recent UCL results.</div>", unsafe_allow_html=True)
         recent_matches = ucl_df.dropna(subset=['home_team','away_team','home_goals','away_goals']).sort_values('date').tail(8)
         for i in range(0, len(recent_matches), 2):
             cols = st.columns(2)
