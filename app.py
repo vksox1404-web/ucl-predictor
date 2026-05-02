@@ -202,18 +202,25 @@ def load_data():
 
 @st.cache_data(ttl=3600)
 def get_upcoming_matches():
+    from datetime import datetime, timezone
     api_key = os.getenv("FOOTBALL_API_KEY")
     try:
         r = requests.get(
             "https://api.football-data.org/v4/competitions/CL/matches",
             headers={"X-Auth-Token": api_key},
-            params={"status": "SCHEDULED,TIMED"},
+            params={"season": 2025},
             timeout=5
         )
         if r.status_code == 200:
+            now = datetime.now(timezone.utc)
             matches = r.json().get("matches", [])
             result = []
             for m in matches:
+                if m.get("status") == "FINISHED":
+                    continue
+                match_date = datetime.fromisoformat(m["utcDate"].replace("Z", "+00:00"))
+                if match_date <= now:
+                    continue
                 home = m["homeTeam"].get("name")
                 away = m["awayTeam"].get("name")
                 if home and away:
