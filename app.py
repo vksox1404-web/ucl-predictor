@@ -207,7 +207,7 @@ def get_upcoming_matches():
         r = requests.get(
             "https://api.football-data.org/v4/competitions/CL/matches",
             headers={"X-Auth-Token": api_key},
-            params={"status": "SCHEDULED"},
+            params={"status": "SCHEDULED,TIMED"},
             timeout=5
         )
         if r.status_code == 200:
