@@ -14,7 +14,7 @@ load_dotenv()
 
 def get_api_key():
     """Read API key from .env locally or Streamlit secrets on cloud."""
-    key = get_api_key()
+    key = os.getenv("FOOTBALL_API_KEY")
     if not key:
         try:
             key = st.secrets["FOOTBALL_API_KEY"]
